@@ -21,6 +21,7 @@
 		<module>inventario-service</module>
 		<module>discovery-server</module>
 		<module>api-gateway</module>
+		<module>notification-service</module>
 	</modules>
 
 	<name>microservicios-spring-boot</name>
