@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# docker-compose volumes
+mongo-data/
+mysql_keycloack_data/
+mysql_keycloak_data/
