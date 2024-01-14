@@ -36,3 +36,4 @@ build/
 mongo-data/
 mysql_keycloack_data/
 mysql_keycloak_data/
+grafana/
