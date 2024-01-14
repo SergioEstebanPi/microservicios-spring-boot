@@ -2,6 +2,7 @@ package com.msvc.order.service;
 
 import brave.Span;
 import brave.Tracer;
+import com.msvc.order.config.rabbitmq.Producer;
 import com.msvc.order.dto.OrderLineItemsDto;
 import com.msvc.order.dto.OrderRequest;
 import com.msvc.order.dto.inventario.InventarioResponse;
@@ -44,6 +45,9 @@ public class OrderService {
     @Autowired
     private Tracer tracer;
 
+    @Autowired
+    private Producer producer;
+
     //@Transactional(readOnly = true)
     @Transactional
     public String placeOrder(OrderRequest orderRequest){
@@ -83,6 +87,7 @@ public class OrderService {
             boolean allProductosInStock = Arrays.stream(inventarioResponses).allMatch(InventarioResponse::isInStock);
             if(allProductosInStock){
                 orderRepository.save(order);
+                enviarMensajeConRabbitMQ("Notificacion con RabbitMQ (order-service)");
                 kafkaTemplate.send("notificationTopic", new OrderPlacedEvent(order.getNumeroPedido()));
                 return "Pedido creado con exito";
             } else {
@@ -96,6 +101,12 @@ public class OrderService {
         }
 
         return "Error";
+    }
+
+    private void enviarMensajeConRabbitMQ(String message){
+        log.info("Inicio envio mensaje RabbitMQ");
+        producer.send(message);
+        log.info("El mensaje '{}' ha sido enviado con exito", message);
     }
 
     private OrderLineItems mapToDto(OrderLineItemsDto orderLineItemsDto){
