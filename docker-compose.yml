@@ -1,6 +1,22 @@
 version: '3.9'
 services:
 
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27017"
+    expose:
+      - "27017"
+    volumes:
+      - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ./mongo-data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: producto-service-prod
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+
   zipkin:
     image: openzipkin/zipkin
     container_name: zipkin
@@ -8,32 +24,32 @@ services:
       - "9411:9411"
 
   keycloak-mysql:
-    container_name: keycloack-mysql
+    container_name: keycloak-mysql
     image: mysql:8.0.31
     volumes:
-      - ./mysql_keycloack_data:/var/lib/mysql
+      - ./mysql_keycloak_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: keycloack
-      MYSQL_USER: keycloack
+      MYSQL_DATABASE: keycloak
+      MYSQL_USER: keycloak
       MYSQL_PASSWORD: root
 
-  keycloack:
-    container_name: keycloack
+  keycloak:
+    container_name: keycloak
     image: quay.io/keycloak/keycloak:20.0.3
     command: ["start-dev", "--import-realm"]
     environment:
       DB_VENDOR: MYSQL
       DB_ADDR: mysql
-      DB_DATABASE: keycloack
-      DB_USER: keycloack
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
       DB_PASSWORD: admin
-      KEYCLOACK_ADMIN: admin
-      KEYCLOACK_ADMIN_PASSWORD: admin
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
     ports:
-      - "8181:8181"
+      - "8080:8080"
     volumes:
-      - ./realms/:/opt/keycloack/data/import/
+      - ./realms/:/opt/keycloak/data/import/
     depends_on:
       - keycloak-mysql
 
