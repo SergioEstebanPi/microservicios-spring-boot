@@ -1,0 +1,380 @@
+{
+	"info": {
+		"_postman_id": "68853dc7-0642-440c-9947-256e09cec6b5",
+		"name": "projecto-02",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28422949"
+	},
+	"item": [
+		{
+			"name": "producto-service",
+			"item": [
+				{
+					"name": "Guardar producto",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"producto1\",\n    \"descripcion\": \"desc1\",\n    \"precio\": \"2000\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/producto",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"producto"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar productos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/producto",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"producto"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "order-service",
+			"item": [
+				{
+					"name": "Registrar orden",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderLineItemsDtos\": [\n        {\n            \"codigoSku\": \"inventario1\",\n            \"precio\": \"10\",\n            \"cantidad\": \"1\"\n        },\n        {\n            \"codigoSku\": \"inventario2\",\n            \"precio\": \"10\",\n            \"cantidad\": \"1\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/api/order",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"order"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "inventario-service",
+			"item": [
+				{
+					"name": "Consultar codigosSku",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8082/api/inventario?codigosSku=inventario1,inventario2",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"inventario"
+							],
+							"query": [
+								{
+									"key": "codigosSku",
+									"value": "inventario1,inventario2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "api-gateway",
+			"item": [
+				{
+					"name": "producto",
+					"item": [
+						{
+							"name": "Listar productos",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8083/api/producto",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"producto"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "order",
+					"item": [
+						{
+							"name": "Registrar orden",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"orderLineItemsDtos\": [\n        {\n            \"codigoSku\": \"producto1\",\n            \"precio\": \"10\",\n            \"cantidad\": \"1\"\n        },\n        {\n            \"codigoSku\": \"producto1\",\n            \"precio\": \"10\",\n            \"cantidad\": \"1\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8083/api/order",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"order"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Registrar orden zipkin",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJBWlp5UFVpVW84WloyQ3lfWWZkWVZkWEN6cXdTbzR4QTdnWlVlYW9EMzZZIn0.eyJleHAiOjE3MDUxODcyOTUsImlhdCI6MTcwNTE4Njk5NSwianRpIjoiZDM4MTM1MGYtZTZiMy00YmY0LTkwY2YtMTllYTZlYjQ1MzAwIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgxL3JlYWxtcy9zcHJpbmctYm9vdC1taWNyb3NlcnZpY2VzLXJlYWxtIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6Ijg3ZGVjOTAwLTQ0MjgtNDU5YS1hMzJlLWYzNDIwMTQ5ZjQzOCIsInR5cCI6IkJlYXJlciIsImF6cCI6InNwcmluZy1jbG91ZC1jbGllbnQiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIiwiZGVmYXVsdC1yb2xlcy1zcHJpbmctYm9vdC1taWNyb3NlcnZpY2VzLXJlYWxtIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCBvZmZsaW5lX2FjY2VzcyIsImNsaWVudEhvc3QiOiIxOTIuMTY4LjY1LjEiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsInByZWZlcnJlZF91c2VybmFtZSI6InNlcnZpY2UtYWNjb3VudC1zcHJpbmctY2xvdWQtY2xpZW50IiwiY2xpZW50QWRkcmVzcyI6IjE5Mi4xNjguNjUuMSIsImNsaWVudF9pZCI6InNwcmluZy1jbG91ZC1jbGllbnQifQ.GX0fz5Z7J8rLXS-uenZU42f_EAaRrNe4IN17shAfrsyLjGekcMs7mCv8p-tv-DkKWGT2RfIcpDjaDxul4HWZWLeibGbb2K0-SDEm4ySu8q4Y_09zGqN95o-cbYsjic-tIB4ftxURhTgdf3eqVNLR2SoZbckhp2G3vqEeNbqsu6uGlD8Qx6XmWjANdyzABrmZLLCM8F_Fr0EYGq2T2MqKbrCCrh39Zy3v53B4lb6UchsEfRkb8V_SO2ejgDudtGIbZZJtTRDEuVdIC8nPCXKa4uv4cZ6BlCNtLD-6oOoKWonxFwVv0VPOsNzOXYFppe-hn3fhVdOKbaK1_VUiSlZ1Ng",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"orderLineItemsDtos\": [\n        {\n            \"codigoSku\": \"producto2\",\n            \"precio\": \"10\",\n            \"cantidad\": \"1\"\n        },\n        {\n            \"codigoSku\": \"producto3\",\n            \"precio\": \"10\",\n            \"cantidad\": \"1\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8083/api/order",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"order"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "inventario",
+					"item": [
+						{
+							"name": "Consultar codigosSku",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8083/api/inventario?codigosSku=inventario1",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"inventario"
+									],
+									"query": [
+										{
+											"key": "codigosSku",
+											"value": "inventario1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "keycloak",
+					"item": [
+						{
+							"name": "Generar token",
+							"request": {
+								"auth": {
+									"type": "oauth2",
+									"oauth2": [
+										{
+											"key": "accessTokenUrl",
+											"value": "http://localhost:8080/realms/spring-boot-microservices-realm/protocol/openid-connect/token",
+											"type": "string"
+										},
+										{
+											"key": "grant_type",
+											"value": "client_credentials",
+											"type": "string"
+										},
+										{
+											"key": "authUrl",
+											"value": "http://localhost:8081/realms/spring-boot-microservices-realm/protocol/openid-connect/auth",
+											"type": "string"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "useBrowser",
+											"value": false,
+											"type": "boolean"
+										},
+										{
+											"key": "clientSecret",
+											"value": "NZhE7ZvGISpi5d4VzZldoJLYkf6y0L8o",
+											"type": "string"
+										},
+										{
+											"key": "tokenName",
+											"value": "token",
+											"type": "string"
+										},
+										{
+											"key": "scope",
+											"value": "openid offline_access",
+											"type": "string"
+										},
+										{
+											"key": "clientId",
+											"value": "spring-cloud-client",
+											"type": "string"
+										},
+										{
+											"key": "addTokenTo",
+											"value": "header",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8083/api/producto",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"producto"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Prueba token",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJBWlp5UFVpVW84WloyQ3lfWWZkWVZkWEN6cXdTbzR4QTdnWlVlYW9EMzZZIn0.eyJleHAiOjE3MDI3NjkyMjUsImlhdCI6MTcwMjc2ODkyNSwianRpIjoiOTlmNjllN2ItZjBjZC00YmI3LWE1YTYtNTJjYmQ4YWE2YjllIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgxL3JlYWxtcy9zcHJpbmctYm9vdC1taWNyb3NlcnZpY2VzLXJlYWxtIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6Ijg3ZGVjOTAwLTQ0MjgtNDU5YS1hMzJlLWYzNDIwMTQ5ZjQzOCIsInR5cCI6IkJlYXJlciIsImF6cCI6InNwcmluZy1jbG91ZC1jbGllbnQiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIiwiZGVmYXVsdC1yb2xlcy1zcHJpbmctYm9vdC1taWNyb3NlcnZpY2VzLXJlYWxtIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCBvZmZsaW5lX2FjY2VzcyIsImNsaWVudEhvc3QiOiIxOTIuMTY4LjY1LjEiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsInByZWZlcnJlZF91c2VybmFtZSI6InNlcnZpY2UtYWNjb3VudC1zcHJpbmctY2xvdWQtY2xpZW50IiwiY2xpZW50QWRkcmVzcyI6IjE5Mi4xNjguNjUuMSIsImNsaWVudF9pZCI6InNwcmluZy1jbG91ZC1jbGllbnQifQ.S2FAo-ExAwm3FWmHxJUXmV7gIgjD5lv_anOypaiIVuqAli_tX-k6adrKzp2ZmmBe-j33Qh3XW88p3heWSSyfF2cxHOi1EGSRA03goTjVp_NKZwWjSqx9jacH8cDxfK6dVJL7ZLj62rjsCwMuL_mbMWggxFdiRC_IwXzPi9FgYoo3PH273qeJQBeU_ue87lSAfJs2WU9b9IOtQvpUoLuzBUTIGYT4_1bfaBDFhDZSpxlgXAwL6JVSZ_5EKfkfVf25ORevgr8ixZn-wNbrd8U8X2LNg42VudMW1vQzMcy66rRyR9W5KIf-IsFc_N8Gk4Uomzst6QfryVmZfDO5ueKwOA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8083/api/producto",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"producto"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
